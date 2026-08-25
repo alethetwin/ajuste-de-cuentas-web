@@ -1,4 +1,4 @@
-# Project: Sakai Vue (ajuste-de-cuentas-web)
+# Project: Ajuste de cuentas (ajuste-de-cuentas-web)
 
 ## Architecture
 - SPA con Vue Router 4.4+

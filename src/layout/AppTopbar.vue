@@ -1,8 +1,22 @@
 <script setup>
+import { useAuth } from '@/composables/use-auth.ts';
 import { useLayout } from '@/layout/composables/layout';
+import Menu from 'primevue/menu';
+import { ref } from 'vue';
 import AppConfigurator from './AppConfigurator.vue';
 
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
+
+const menu = ref();
+const items = ref([
+    {
+        label: useAuth().user.value || 'Usuario',
+        items: [{ label: 'Cerrar sesión', icon: 'pi pi-sign-out', command: () => useAuth().logout() }]
+    }
+]);
+const toggle = (event) => {
+    menu.value.toggle(event);
+};
 </script>
 
 <template>
@@ -30,7 +44,7 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
                     </g>
                 </svg>
 
-                <span>SAKAI</span>
+                <span>Ajuste de Cuentas</span>
             </router-link>
         </div>
 
@@ -68,9 +82,11 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
                         <i class="pi pi-inbox"></i>
                         <span>Messages</span>
                     </button>
-                    <button type="button" class="layout-topbar-action">
+
+                    <button type="button" class="layout-topbar-action" @click="toggle">
+                        <Menu ref="menu" :model="items" popup class="w-40" />
                         <i class="pi pi-user"></i>
-                        <span>Profile</span>
+                        <span>Perfil</span>
                     </button>
                 </div>
             </div>

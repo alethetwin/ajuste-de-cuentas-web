@@ -1,10 +1,39 @@
 <script setup>
 import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
+import { useAuth } from '@/composables/use-auth';
+import Message from 'primevue/message';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-const email = ref('');
+const username = ref('');
 const password = ref('');
-const checked = ref(false);
+// const checked = ref(false);
+
+const { login } = useAuth();
+
+const loading = ref(false);
+const errorMessage = ref('');
+
+const router = useRouter();
+
+const handleLogin = async () => {
+    errorMessage.value = '';
+    loading.value = true;
+    try {
+        const result = await login(username.value, password.value);
+        if (!result.success) {
+            errorMessage.value = result.message;
+        }
+
+        router.push({ name: 'dashboard' });
+        // Redirect or perform any other actions after successful login
+    } catch (error) {
+        console.error('Login failed:', error);
+        // Handle login error (e.g., show an error message)
+    } finally {
+        loading.value = false;
+    }
+};
 </script>
 
 <template>
@@ -31,25 +60,29 @@ const checked = ref(false);
                                 />
                             </g>
                         </svg>
-                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to PrimeLand!</div>
-                        <span class="text-muted-color font-medium">Sign in to continue</span>
+                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Bienvenido a Ajuste de Cuentas!</div>
+                        <span class="text-muted-color font-medium">Inicia sesión para continuar</span>
+                    </div>
+                    <div>
+                        <Message v-if="errorMessage" severity="error" text="Usuario: admin | Contraseña: admin" class="mb-4">{{ errorMessage }}</Message>
+                        <!--  -->
                     </div>
 
                     <div>
-                        <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                        <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-[30rem] mb-8" v-model="email" />
+                        <label for="username" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Usuario</label>
+                        <InputText id="username" type="text" placeholder="Nombre de usuario" class="w-full md:w-120 mb-8" v-model="username" />
 
-                        <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
-                        <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="mb-4" fluid :feedback="false"></Password>
+                        <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Contraseña</label>
+                        <Password id="password1" v-model="password" placeholder="Contraseña" :toggleMask="true" class="mb-4" fluid :feedback="false"></Password>
 
-                        <div class="flex items-center justify-between mt-2 mb-8 gap-8">
+                        <!-- <div class="flex items-center justify-between mt-2 mb-8 gap-8">
                             <div class="flex items-center">
-                                <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
-                                <label for="rememberme1">Remember me</label>
+                                <Checkbox v-model="checked" id="rememberme" binary class="mr-2"></Checkbox>
+                                <label for="rememberme">Remember me</label>
                             </div>
                             <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
-                        </div>
-                        <Button label="Sign In" class="w-full" as="router-link" to="/"></Button>
+                        </div> -->
+                        <Button label="Sign In" class="w-full mt-2" :loading="loading" @click="handleLogin"></Button>
                     </div>
                 </div>
             </div>

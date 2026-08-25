@@ -6,9 +6,11 @@ module.exports = {
     env: {
         node: true
     },
-    extends: ['plugin:vue/vue3-essential', 'eslint:recommended', '@vue/eslint-config-prettier'],
+    extends: ['plugin:vue/vue3-essential', 'eslint:recommended'],
+    parser: 'vue-eslint-parser',
     parserOptions: {
-        ecmaVersion: 'latest'
+        ecmaVersion: 'latest',
+        sourceType: 'module'
     },
     rules: {
         'vue/multi-word-component-names': 'off',
@@ -18,6 +20,7 @@ module.exports = {
             {
                 order: ['script', 'template', 'style']
             }
-        ]
+        ],
+        '@typescript-eslint/explicit-function-return-type': 'off'
     }
 };

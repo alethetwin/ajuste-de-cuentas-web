@@ -1,5 +1,10 @@
+import { useAuth } from '@/composables/use-auth.ts';
 import AppLayout from '@/layout/AppLayout.vue';
 import { createRouter, createWebHistory } from 'vue-router';
+
+const authCheck = (_to, _from, next) => {
+    return useAuth().isAuthenticated.value ? next() : next({ name: 'login' });
+};
 
 const router = createRouter({
     history: createWebHistory(),
@@ -11,6 +16,7 @@ const router = createRouter({
                 {
                     path: '/',
                     name: 'dashboard',
+                    meta: { requiresAuth: true },
                     component: () => import('@/views/Dashboard.vue')
                 },
                 {
@@ -141,6 +147,14 @@ const router = createRouter({
             component: () => import('@/views/pages/auth/Error.vue')
         }
     ]
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresAuth) {
+        return authCheck(to, from, next);
+    }
+
+    return next();
 });
 
 export default router;
