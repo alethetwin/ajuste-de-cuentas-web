@@ -13,3 +13,5 @@ dist
 api-generator/typedoc.json
 **/.DS_Store
 *.tsbuildinfo
+.docker
+docker-compose.override.yml

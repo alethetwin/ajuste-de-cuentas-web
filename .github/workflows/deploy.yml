@@ -1,0 +1,66 @@
+name: Build & Deploy Frontend
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        permissions:
+            packages: write
+            contents: read
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build application
+              run: npm run build
+
+            - name: Login to GHCR
+              run: |
+                  echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            - name: Build image
+              uses: docker/build-push-action@v5
+              with:
+                  context: .
+                  file: ./Dockerfile
+                  push: true
+                  tags: |
+                    ghcr.io/${{ github.repository_owner }}/ajuste-de-cuentas-web:latest
+
+            - name: Push image
+              run: |
+                  docker push ghcr.io/${{ github.repository_owner }}/ajuste-de-cuentas-web:latest
+
+            - name: Deploy to VPS via SSH
+              uses: appleboy/ssh-action@v1
+              with:
+                  host: ${{ secrets.VPS_HOST }}
+                  username: ${{ secrets.VPS_USER }}
+                  key: ${{ secrets.VPS_SSH_KEY }}
+                  port: 22
+                  script: |
+                      cd /app
+                      docker compose down
+                      docker compose pull
+                      docker compose up -d --build
+
+            - name: Update local .env from secrets (optional)
+              run: |
+                  if [ -f ".env.production" ]; then
+                      echo "Using production environment variables from CI/CD pipeline"
+                  else
+                      echo "No .env.production found, using defaults"
+                  fi
