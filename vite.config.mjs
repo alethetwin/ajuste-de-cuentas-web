@@ -12,38 +12,38 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
 
     return {
-    optimizeDeps: {
-        noDiscovery: true
-    },
-    plugins: [
-        vue(),
-        tailwindcss(),
-        tsConfig(),
-        Components({
-            resolvers: [PrimeVueResolver()]
-        })
-    ],
-    resolve: {
-        alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
-        }
-    },
-    server: {
-        proxy: {
-            '/api': {
-                target: env.VITE_API_URL,
-                changeOrigin: true,
-                secure: false,
-                rewrite: (path) => path.replace(/^\/api/, '')
+        optimizeDeps: {
+            noDiscovery: true
+        },
+        plugins: [
+            vue(),
+            tailwindcss(),
+            tsConfig(),
+            Components({
+                resolvers: [PrimeVueResolver()]
+            })
+        ],
+        resolve: {
+            alias: {
+                '@': fileURLToPath(new URL('./src', import.meta.url))
+            }
+        },
+        server: {
+            proxy: {
+                '/api': {
+                    target: env.VITE_API_URL,
+                    changeOrigin: true,
+                    secure: false,
+                    rewrite: (path) => path.replace(/^\/api/, '')
+                }
+            }
+        },
+        css: {
+            preprocessorOptions: {
+                scss: {
+                    api: 'modern-compiler'
+                }
             }
         }
-    },
-    css: {
-        preprocessorOptions: {
-            scss: {
-                api: 'modern-compiler'
-            }
-        }
-    }
     };
 });
