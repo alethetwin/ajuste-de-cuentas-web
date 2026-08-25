@@ -1,5 +1,9 @@
 # Project: Sakai Vue (ajuste-de-cuentas-web)
 
+## Architecture
+- SPA con Vue Router 4.4+
+- `<router-view />` en `App.vue` como entry point principal
+
 ## Core Commands
 - `npm run dev` — start Vite dev server
 - `npm run build` — production build with Vite
