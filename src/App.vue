@@ -1,7 +1,7 @@
+<script setup></script>
+
 <template>
-  <Button>Verify</Button>
+    <router-view />
 </template>
 
-<script setup lang="ts">
-import Button from 'primevue/button'
-</script>
+<style scoped></style>
