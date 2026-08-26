@@ -1,22 +1,9 @@
-version: '3.8'
-
 services:
-  app:
+  ajuste_de_cuentas_web:
     build:
       context: .
       dockerfile: Dockerfile
-      target: production
+    image: ajuste_de_cuentas_web:latest
     ports:
       - "80:80"
-    volumes:
-      - ./logs:/var/log/nginx:rw
-    environment:
-      - NODE_ENV=production
-      - VITE_API_URL=${VITE_API_URL:-http://localhost:3000}
-    restart: unless-stopped
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
+    restart: always
