@@ -53,9 +53,10 @@ jobs:
                   port: 22
                   script: |
                       cd /app
-                      docker compose down
+                      docker compose stop ajuste-de-cuentas-web || true
+                      docker compose rm -f ajuste-de-cuentas-web || true
                       docker compose pull
-                      docker compose up -d --build
+                      docker compose up -d ajuste-de-cuentas-web
 
             - name: Update local .env from secrets (optional)
               run: |
