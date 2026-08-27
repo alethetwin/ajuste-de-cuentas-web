@@ -67,7 +67,7 @@ const handleLogin = async () => {
                     <!--  -->
                 </div>
 
-                <div>
+                <form @submit.prevent="handleLogin" @keyup.enter="handleLogin">
                     <label for="username" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Usuario</label>
                     <InputText id="username" type="text" placeholder="Nombre de usuario" class="w-full md:w-120 mb-8" v-model="username" />
 
@@ -82,7 +82,7 @@ const handleLogin = async () => {
                             <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
                         </div> -->
                     <Button label="Sign In" class="w-full mt-2" :loading="loading" @click="handleLogin"></Button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
