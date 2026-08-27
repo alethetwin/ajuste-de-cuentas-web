@@ -14,6 +14,16 @@ const model = ref([
         ]
     },
     {
+        label: 'Ajustes de cuentas',
+        items: [
+            {
+                label: 'Mensual',
+                icon: 'pi pi-fw pi-calendar',
+                to: '/ajustes-de-cuentas'
+            }
+        ]
+    },
+    {
         label: 'UI Components',
         path: '/uikit',
         items: [

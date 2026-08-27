@@ -20,6 +20,14 @@ const router = createRouter({
                     component: () => import('@/views/Dashboard.vue')
                 },
                 {
+                    path: '/ajustes-de-cuentas',
+                    name: 'ajustes-de-cuentas',
+                    meta: {
+                        requiresAuth: true
+                    },
+                    component: () => import('@/views/ajuste-de-cuentas/Mensual.vue')
+                },
+                {
                     path: '/uikit/formlayout',
                     name: 'formlayout',
                     component: () => import('@/views/uikit/FormLayout.vue')
